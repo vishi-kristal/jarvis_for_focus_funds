@@ -138,3 +138,13 @@ temp/
 *.dylib
 *.node
 *.pack.gz
+
+# Frontend build artifacts
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+
+# Large documents (uncomment if you want to exclude PDFs from git)
+# documents/*.pdf
+# Returns/*.xlsx
+# Returns/*.csv

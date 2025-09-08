@@ -1,6 +1,21 @@
-# Kristal.AI's J.A.R.V.I.S Backend
+# Kristal.AI's J.A.R.V.I.S - AI-Powered Fund Analysis System
 
-An AI-powered backend service for analyzing investment fund documents using OpenAI's Responses API with Retrieval-Augmented Generation (RAG).
+An intelligent fund analysis platform that combines document search with financial calculations using OpenAI's Responses API, Code Interpreter, and modern web technologies.
+
+## 🚀 Quick Deploy
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/deploy)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+## 📋 Overview
+
+This full-stack application provides AI-powered analysis of investment fund documents with the following capabilities:
+
+- **Document Analysis**: Search and analyze 100+ fund documents using vector search
+- **Financial Calculations**: Compute metrics like Sharpe ratio, max drawdown, volatility using real returns data
+- **Hybrid Intelligence**: Combines document insights with precise Excel calculations
+- **Modern UI**: Beautiful Next.js 15 frontend with real-time chat interface
+- **Production Ready**: Deployed on Vercel (frontend) + Railway (backend)
 
 ## Overview
 
@@ -36,16 +51,42 @@ This backend provides a FastAPI-based service that allows financial analysts to 
 - Fund documents in PDF format
 - Optional: JSON metadata files
 
-## Installation
+## 🚀 Deployment
 
-1. **Clone or download the project files**
+### Option 1: One-Click Deploy (Recommended)
 
-2. **Install dependencies**:
+1. **Deploy Backend to Railway**:
+   - Click the Railway deploy button above
+   - Connect your GitHub account
+   - Set environment variables (see DEPLOYMENT.md)
+   - Deploy!
+
+2. **Deploy Frontend to Vercel**:
+   - Click the Vercel deploy button above
+   - Connect your GitHub account
+   - Set `NEXT_PUBLIC_API_URL` to your Railway backend URL
+   - Deploy!
+
+### Option 2: Manual Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed step-by-step instructions.
+
+## 🛠️ Local Development
+
+### Prerequisites
+
+- Python 3.8+
+- Node.js 18+
+- OpenAI API key
+
+### Backend Setup
+
+1. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables**:
+2. **Set up environment variables**:
    ```bash
    cp env.example .env
    ```
@@ -55,9 +96,50 @@ This backend provides a FastAPI-based service that allows financial analysts to 
    OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-4. **Prepare your documents**:
-   - Create a `documents/` directory and add your PDF fund documents
-   - Create a `metadata/` directory and add any JSON metadata files (optional)
+3. **Prepare your documents**:
+   - Add PDF fund documents to `documents/` directory
+   - Add JSON metadata files to `metadata/` directory (optional)
+   - Add `Returns.xlsx` to `Returns/` directory
+
+4. **Initialize AI knowledge base**:
+   ```bash
+   python setup.py
+   ```
+
+5. **Start the backend**:
+   ```bash
+   python main.py
+   ```
+
+### Frontend Setup
+
+1. **Navigate to frontend directory**:
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   ```bash
+   cp env.example .env.local
+   ```
+   
+   Edit `.env.local` and set your backend URL:
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
+
+4. **Start the frontend**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**:
+   Visit `http://localhost:3000`
 
 ## Setup (One-time initialization)
 
