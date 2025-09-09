@@ -92,7 +92,7 @@ export function ChatWindow() {
       
       if (err instanceof ApiError) {
         if (err.status === 0) {
-          errorMessage = 'Unable to connect to the backend server. Please make sure it\'s running on http://localhost:8000'
+          errorMessage = 'Unable to connect to the backend server. Please check if the backend is running.'
         } else {
           errorMessage = err.message
         }

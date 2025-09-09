@@ -32,11 +32,13 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000", 
         "http://127.0.0.1:3000",
-        "https://*.vercel.app",  # Vercel deployments
-        "https://*.railway.app"  # Railway deployments
+        "https://jarvis-for-focus-funds.vercel.app",  # Your specific Vercel URL
+        "https://web-production-1ea6.up.railway.app",  # Your Railway URL
+        "https://*.vercel.app",  # Vercel deployments (wildcard)
+        "https://*.railway.app"  # Railway deployments (wildcard)
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
