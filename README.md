@@ -11,7 +11,7 @@ An intelligent fund analysis platform that combines document search with financi
 
 This full-stack application provides AI-powered analysis of investment fund documents with the following capabilities:
 
-- **Document Analysis**: Search and analyze 100+ fund documents using vector search
+- **Document Analysis**: Search and analyze 100+ fund documents using vector search.
 - **Financial Calculations**: Compute metrics like Sharpe ratio, max drawdown, volatility using real returns data
 - **Hybrid Intelligence**: Combines document insights with precise Excel calculations
 - **Modern UI**: Beautiful Next.js 15 frontend with real-time chat interface
