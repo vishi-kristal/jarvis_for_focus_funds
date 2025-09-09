@@ -33,6 +33,8 @@ app.add_middleware(
         "http://localhost:3000", 
         "http://127.0.0.1:3000",
         "https://jarvis-for-focus-funds.vercel.app",  # Your specific Vercel URL
+        "https://jarvis-for-focus-funds-hoemvmfhe.vercel.app",  # Your actual Vercel URL
+        "https://jarvis-for-focus-git-cf2d9b-vishirajvanshi-kristalais-projects.vercel.app",
         "https://web-production-1ea6.up.railway.app",  # Your Railway URL
         "https://*.vercel.app",  # Vercel deployments (wildcard)
         "https://*.railway.app"  # Railway deployments (wildcard)
