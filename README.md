@@ -19,7 +19,7 @@ This full-stack application provides AI-powered analysis of investment fund docu
 
 ## Overview
 
-This backend provides a FastAPI-based service that allows financial analysts to query a knowledge base of 100+ fund documents using natural language. The system leverages OpenAI's file search capabilities and vector stores to provide accurate, context-aware answers about investment funds.
+This backend provides a FastAPI-based service that allows financial analysts to query a knowledge base of 100+ fund documents using natural language. The system leverages OpenAI's file search capabilities and vector stores to provide accurate, context-aware answers about investment funds
 
 ## Features
 
