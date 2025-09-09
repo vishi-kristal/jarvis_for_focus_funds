@@ -28,7 +28,7 @@ rsync -av --exclude='.env' \
 echo "✅ Clean version created in: $CLEAN_DIR"
 echo ""
 echo "📋 Files to manually upload:"
-echo "1. Go to https://github.com/Elnino0009/FundSight"
+echo "1. Go to https://github.com/vishi-kristal/jarvis_for_focus_funds"
 echo "2. Click 'uploading an existing file' or drag and drop"
 echo "3. Upload all files from the $CLEAN_DIR directory"
 echo ""
