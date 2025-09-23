@@ -8,6 +8,7 @@ from typing import Dict, Any, List
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from openai import OpenAI
 from config import config
 from models import QuestionRequest, AnswerResponse, ErrorResponse
@@ -32,12 +33,10 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000", 
         "http://127.0.0.1:3000",
-        "https://jarvis-for-focus-funds.vercel.app",  # Your specific Vercel URL
-        "https://jarvis-for-focus-funds-hoemvmfhe.vercel.app",  # Your actual Vercel URL
-        "https://jarvis-for-focus-funds-m47bbmm5n.vercel.app",  # Your current Vercel URL
-        "https://web-production-1ea6.up.railway.app",  # Your Railway URL
-        "https://*.vercel.app",  # Vercel deployments (wildcard)
-        "https://*.railway.app"  # Railway deployments (wildcard)
+        "https://jarvis-for-focus-funds.vercel.app",
+        "https://jarvis-for-focus-funds-hoemvmfhe.vercel.app",
+        "https://jarvis-for-focus-funds-m47bbmm5n.vercel.app",
+        "https://web-production-1ea6.up.railway.app"
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -502,19 +501,25 @@ async def ask_question(request: QuestionRequest):
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
     """Custom HTTP exception handler."""
-    return {
-        "error": exc.detail,
-        "detail": f"Status code: {exc.status_code}"
-    }
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": exc.detail,
+            "detail": f"Status code: {exc.status_code}"
+        }
+    )
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
     """General exception handler for unexpected errors."""
     logger.error(f"Unhandled exception: {str(exc)}")
-    return {
-        "error": "An unexpected error occurred",
-        "detail": str(exc)
-    }
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "An unexpected error occurred",
+            "detail": str(exc)
+        }
+    )
 
 if __name__ == "__main__":
     import uvicorn
