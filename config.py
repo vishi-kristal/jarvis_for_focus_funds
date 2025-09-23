@@ -19,6 +19,7 @@ class Config:
         self.assistant_id = os.getenv("ASSISTANT_ID")
         self.vector_store_id = os.getenv("VECTOR_STORE_ID")
         self.excel_file_id = os.getenv("EXCEL_FILE_ID")
+        self.metadata_file_id = os.getenv("METADATA_FILE_ID")
         self.host = os.getenv("HOST", "0.0.0.0")
         self.port = int(os.getenv("PORT", 8000))
         self.debug = os.getenv("DEBUG", "True").lower() == "true"
@@ -27,8 +28,8 @@ class Config:
         if not self.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required in environment variables")
     
-    def save_config(self, assistant_id: str, vector_store_id: str, excel_file_id: str = None) -> None:
-        """Save assistant, vector store, and Excel file IDs to environment file."""
+    def save_config(self, assistant_id: str, vector_store_id: str, excel_file_id: str = None, metadata_file_id: str = None) -> None:
+        """Save assistant, vector store, Excel file, and metadata file IDs to environment file."""
         env_file = Path(".env")
         
         # Read existing .env file
@@ -42,6 +43,7 @@ class Config:
         assistant_found = False
         vector_store_found = False
         excel_file_found = False
+        metadata_file_found = False
         
         for line in lines:
             if line.startswith("ASSISTANT_ID="):
@@ -53,6 +55,9 @@ class Config:
             elif line.startswith("EXCEL_FILE_ID="):
                 updated_lines.append(f"EXCEL_FILE_ID={excel_file_id or ''}")
                 excel_file_found = True
+            elif line.startswith("METADATA_FILE_ID="):
+                updated_lines.append(f"METADATA_FILE_ID={metadata_file_id or ''}")
+                metadata_file_found = True
             else:
                 updated_lines.append(line)
         
@@ -63,6 +68,8 @@ class Config:
             updated_lines.append(f"VECTOR_STORE_ID={vector_store_id}")
         if not excel_file_found and excel_file_id:
             updated_lines.append(f"EXCEL_FILE_ID={excel_file_id}")
+        if not metadata_file_found and metadata_file_id:
+            updated_lines.append(f"METADATA_FILE_ID={metadata_file_id}")
         
         # Write back to .env file
         env_file.write_text('\n'.join(updated_lines))
@@ -72,6 +79,8 @@ class Config:
         self.vector_store_id = vector_store_id
         if excel_file_id:
             self.excel_file_id = excel_file_id
+        if metadata_file_id:
+            self.metadata_file_id = metadata_file_id
 
 # Global configuration instance
 config = Config()
