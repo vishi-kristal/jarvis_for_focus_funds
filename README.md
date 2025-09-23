@@ -28,7 +28,7 @@ This backend provides a FastAPI-based service that allows financial analysts to 
 - **AI Assistant**: Specialized fund analysis assistant with file search capabilities
 - **RESTful API**: FastAPI-based API with comprehensive error handling
 - **CORS Support**: Configured for frontend integration
-- **Comprehensive Logging**: Detailed logging for debugging and monitoring
+- **Comprehensive Logging**: Detailed logging for debugging and monitoring.
 
 ## Project Structure
 
