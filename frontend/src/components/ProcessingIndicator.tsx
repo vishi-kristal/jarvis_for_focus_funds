@@ -5,7 +5,7 @@ import { Brain, Search, Calculator, BarChart3, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ProcessingIndicatorProps {
-  stage: 'searching' | 'calculating' | 'analyzing' | 'complete'
+  stage: 'searching' | 'complete'
   className?: string
 }
 
@@ -18,26 +18,10 @@ const stageConfig = {
     bgColor: 'bg-blue-50',
     iconColor: 'text-blue-600'
   },
-  calculating: {
-    icon: Calculator,
-    title: 'Running calculations...',
-    description: 'Processing financial metrics with code interpreter',
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-50',
-    iconColor: 'text-purple-600'
-  },
-  analyzing: {
-    icon: BarChart3,
-    title: 'Analyzing results...',
-    description: 'Combining insights and formatting response',
-    color: 'text-green-600',
-    bgColor: 'bg-green-50',
-    iconColor: 'text-green-600'
-  },
   complete: {
     icon: CheckCircle,
     title: 'Complete!',
-    description: 'Analysis finished',
+    description: 'Document search finished',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     iconColor: 'text-green-600'

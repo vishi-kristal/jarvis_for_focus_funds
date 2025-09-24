@@ -4,7 +4,7 @@ export interface Message {
   content: string
   timestamp: Date
   isTyping?: boolean
-  processingStage?: 'searching' | 'calculating' | 'analyzing' | 'complete'
+  processingStage?: 'searching' | 'complete'
   images?: string[]
 }
 

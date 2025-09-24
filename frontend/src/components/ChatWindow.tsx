@@ -13,7 +13,7 @@ export function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [processingStage, setProcessingStage] = useState<'searching' | 'calculating' | 'analyzing' | 'complete'>('searching')
+  const [processingStage, setProcessingStage] = useState<'searching' | 'complete'>('searching')
 
   const handleSendMessage = useCallback(async (content: string) => {
     if (!content.trim()) return
@@ -43,30 +43,9 @@ export function ChatWindow() {
     setMessages(prev => [...prev, typingMessage])
 
     try {
-      // Simulate processing stages
-      const isCalculationQuestion = content.toLowerCase().includes('calculate') || 
-                                  content.toLowerCase().includes('max drawdown') ||
-                                  content.toLowerCase().includes('sharpe ratio') ||
-                                  content.toLowerCase().includes('volatility') ||
-                                  content.toLowerCase().includes('correlation')
-
-      if (isCalculationQuestion) {
-        // Stage 1: Document search
-        setProcessingStage('searching')
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
-        // Stage 2: Code interpreter
-        setProcessingStage('calculating')
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        
-        // Stage 3: Analysis
-        setProcessingStage('analyzing')
-        await new Promise(resolve => setTimeout(resolve, 1000))
-      } else {
-        // For document-only questions, just searching
-        setProcessingStage('searching')
-        await new Promise(resolve => setTimeout(resolve, 1500))
-      }
+      // Simulate document search processing
+      setProcessingStage('searching')
+      await new Promise(resolve => setTimeout(resolve, 1500))
 
       const result = await askQuestion(content)
       

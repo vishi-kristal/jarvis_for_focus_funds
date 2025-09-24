@@ -1,21 +1,192 @@
 # Kristal.AI's J.A.R.V.I.S - AI-Powered Fund Analysis System
 
-An intelligent fund analysis platform that combines document search with financial calculations using OpenAI's Responses API, Code Interpreter, and modern web technologies.
+A comprehensive, production-ready AI system that combines document search, financial calculations, and metadata queries to provide intelligent fund analysis. This system demonstrates advanced patterns for building AI-powered applications that can be adapted for Gemini, Claude, or other AI models.
 
-## 🚀 Quick Deploy
+## 🏗️ System Architecture Overview
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/deploy)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+This system implements a **hybrid AI architecture** that combines multiple AI capabilities:
 
-## 📋 Overview
+- **Document Search**: Vector-based semantic search through PDF documents
+- **Code Interpreter**: Python execution for financial calculations
+- **Metadata Query**: Structured data processing and filtering
+- **Question Classification**: Intelligent routing to appropriate processing paths
+- **Response Generation**: Context-aware answer synthesis with visualizations
 
-This full-stack application provides AI-powered analysis of investment fund documents with the following capabilities:
+## 🧠 Core AI Processing Patterns
 
-- **Document Analysis**: Search and analyze 100+ fund documents using vector search.
-- **Financial Calculations**: Compute metrics like Sharpe ratio, max drawdown, volatility using real returns data.
-- **Hybrid Intelligence**: Combines document insights with precise Excel calculations
-- **Modern UI**: Beautiful Next.js 15 frontend with real-time chat interface
-- **Production Ready**: Deployed on Vercel (frontend) + Railway (backend)
+### 1. Question Classification System
+
+The system uses **keyword-based classification** to route questions to appropriate processing paths:
+
+```python
+def classify_question(self, question: str) -> str:
+    """Classify question type to determine processing approach."""
+    
+    # Metadata query keywords
+    metadata_keywords = [
+        "list", "show", "which", "what funds", "available", "funds in",
+        "geography", "asset type", "instrument type", "strategy", "sub-category"
+    ]
+    
+    calculation_keywords = [
+        "calculate", "compute", "max drawdown", "sharpe ratio",
+        "volatility", "vol", "annualized", "correlation", "beta", "alpha"
+    ]
+    
+    # Classification logic
+    if any(keyword in question.lower() for keyword in calculation_keywords):
+        return "CALCULATION_REQUIRED"
+    elif any(keyword in question.lower() for keyword in metadata_keywords):
+        return "METADATA_QUERY"
+    elif "compare" in question.lower():
+        return "COMPARISON_REQUIRED"
+    else:
+        return "DOCUMENT_SEARCH"
+```
+
+**For Gemini Implementation**: Replace with Gemini's classification capabilities or use a separate classification model.
+
+### 2. Three-Tier Processing Architecture
+
+#### Tier 1: Document Search Only
+```python
+async def search_documents_only(self, question: str) -> dict:
+    """Search documents only (no calculations)"""
+    response = client.responses.create(
+        model="gpt-4o",
+        input=question,
+        instructions=self.get_document_search_instructions(),
+        tools=[{"type": "file_search", "vector_store_ids": [self.vector_store_id]}],
+        max_tool_calls=5
+    )
+    return self.extract_response_content(response)
+```
+
+#### Tier 2: Metadata Query Processing
+```python
+async def query_metadata(self, question: str) -> dict:
+    """Query fund metadata using code interpreter with CSV data."""
+    
+    metadata_instructions = f"""
+    You are J.A.R.V.I.S, an AI assistant for fund metadata analysis.
+    
+    ## AVAILABLE DATA:
+    **Fund Metadata CSV Data:**
+    {self.metadata_csv_data}
+    
+    ## USER QUESTION: 
+    {question}
+    
+    ## TASK:
+    Analyze the fund metadata CSV data to answer the user's question about funds.
+    """
+    
+    response = client.responses.create(
+        model="gpt-4o",
+        input=question,
+        instructions=metadata_instructions,
+        tools=[{"type": "code_interpreter", "container": {"type": "auto"}}],
+        max_tool_calls=5
+    )
+    return self.extract_response_content(response)
+```
+
+#### Tier 3: Hybrid Analysis (Document + Calculations)
+```python
+async def hybrid_analysis(self, question: str, document_context: str) -> dict:
+    """Combine document search with Excel calculations"""
+    
+    enhanced_instructions = f"""
+    You are J.A.R.V.I.S, Kristal.AI's specialized AI assistant for fund analysis.
+    
+    ## AVAILABLE DATA:
+    **Returns Data**: CSV with monthly returns for all funds
+    {self.csv_data}
+    
+    ## PROCESSING APPROACH:
+    1. Load and analyze the returns data from the CSV data provided
+    2. Calculate the requested financial metrics accurately using the actual data
+    3. Provide exact formulas and methodology used for calculations
+    4. Create visualizations for complex metrics (charts, graphs, plots)
+    """
+    
+    response = client.responses.create(
+        model="gpt-4o",
+        input=question,
+        instructions=enhanced_instructions,
+        tools=[
+            {"type": "file_search", "vector_store_ids": [self.vector_store_id]},
+            {"type": "code_interpreter", "container": {"type": "auto"}}
+        ],
+        max_tool_calls=10
+    )
+    return self.extract_response_content(response)
+```
+
+## 🔧 Technical Implementation Details
+
+### Data Sources and Processing
+
+#### 1. Vector Store Management
+```python
+def create_vector_store(self) -> str:
+    """Create a vector store for the Responses API file search."""
+    file_ids = [file_info["file_id"] for file_info in self.uploaded_files 
+                if file_info.get("type") != "csv"]
+    
+    vector_store = self.client.vector_stores.create(
+        name="Fund Documents Vector Store",
+        file_ids=file_ids
+    )
+    return vector_store.id
+```
+
+#### 2. CSV Data Processing
+```python
+def load_csv_data(self) -> str:
+    """Load CSV data from the Returns.csv file."""
+    csv_path = Path("Returns/Returns.csv")
+    
+    with open(csv_path, 'r', encoding='utf-8') as f:
+        csv_data = f.read()
+    return csv_data
+```
+
+#### 3. Metadata Processing
+```python
+def load_metadata_csv_data(self) -> str:
+    """Load CSV data from the focus_funds_metadata.csv file."""
+    metadata_path = Path("metadata/focus_funds_metadata.csv")
+    
+    with open(metadata_path, 'r', encoding='utf-8') as f:
+        csv_data = f.read()
+    return csv_data
+```
+
+### Response Processing and Content Extraction
+
+```python
+def extract_response_content(self, response) -> dict:
+    """Extract content and images from OpenAI response"""
+    content = ""
+    images = []
+    
+    if hasattr(response, 'output') and response.output and len(response.output) > 0:
+        for item in response.output:
+            if hasattr(item, 'content') and item.content:
+                if len(item.content) > 0:
+                    content += item.content[0].text
+            
+            if hasattr(item, 'code_interpreter_outputs'):
+                for output in item.code_interpreter_outputs:
+                    if hasattr(output, 'image') and hasattr(output.image, 'data'):
+                        images.append(output.image.data)
+    
+    return {
+        "content": content if content else "No response generated",
+        "images": images
+    }
+```
 
 ## Overview
 
